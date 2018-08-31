@@ -1,6 +1,4 @@
 #-*- coding: utf-8 -*-
-# Author: Bob
-# Date:   2016.12.22
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy import io as spio
@@ -15,25 +13,25 @@ def anomalyDetection_example():
     plt.show()
     '''多元高斯分布函数，并可视化拟合的边界'''
     mu,sigma2 = estimateGaussian(X)         # 参数估计（求均值和方差）
-    #print (mu,sigma2)
+    print (mu,sigma2)
     p = multivariateGaussian(X,mu,sigma2)   # 多元高斯分布函数
-    #print (p)
+   # print (p)
     visualizeFit(X,mu,sigma2)  # 显示图像
     
     '''选择异常点（在交叉验证CV上训练得到最好的epsilon）'''
     Xval = data['Xval']
     yval = data['yval']   # y=1代表异常
+    print('xval',Xval)
+    print('yval',yval)
     pval = multivariateGaussian(Xval, mu, sigma2) # 计算CV上的概率密度值
-    epsilon,F1 = selectThreshold(yval,pval)       # 选择最优的epsilon临界值
+    epsilon,F1 = selectThreshold(yval,pval)       # 选择最优的epsilon临界值，根据概率的值
     print (u'在CV上得到的最好的epsilon是：%e'%epsilon)
     print (u'对应的F1Score值为：%f'%F1)
     outliers = np.where(p<epsilon)  # 找到小于临界值的异常点，并作图
     plt.plot(X[outliers,0],X[outliers,1],'o',markeredgecolor='r',markerfacecolor='w',markersize=10.)
     plt = display_2d_data(X, 'bx')
     plt.show()
-    
-    
-    
+
     
 # 显示二维数据    
 def display_2d_data(X,marker):
